@@ -1,0 +1,33 @@
+import os
+import glob
+import re
+import numpy as np
+import shutil
+
+dir = "E:/Thesis/data/data_ts_raw"
+
+def get_filenames(directory):
+    """
+    This function creates a list with all the .csv files in the directory
+    that
+    """
+    os.chdir(directory)
+    file_names = []  # List which will store all of the full filepaths.
+
+    # Walk the tree.
+    for file in glob.glob("*.csv"):
+        lat = float(re.split(',', file)[0])
+        lon = float(re.split(',', re.split('.csv', file)[0])[1])
+        if -10<=lat and 10>=lat and -10<=lon and 30>=lat:
+            file_names.append(file)  # Add it to the list.
+    return file_names
+
+# Run the above function and store its results in a variable.
+full_file_paths = get_filenames(dir)
+
+print(np.shape(full_file_paths))
+
+os.chdir(dir)
+
+for file in full_file_paths:
+    shutil.copy(file, "E:/Thesis/data/data_ts_raw/Africa_1010_1030")

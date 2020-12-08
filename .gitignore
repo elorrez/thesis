@@ -2,8 +2,9 @@
 /.ipynb_checkpoints
 .netrc
 /literatuur
-/code/maltlab
-/code/python
 *.pdf
 /code/.idea
 /code/SelectCoords/.idea
+/code/__pycache__
+/code/phd
+/code/testdata

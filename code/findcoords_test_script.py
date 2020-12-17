@@ -4,6 +4,7 @@ import re
 import numpy as np
 import shutil
 
+#dir = "E:/Thesis/data/large_dataset/var/www/html/satex/data_per_pix"
 dir = "E:/Thesis/data/data_ts_raw"
 
 def get_filenamescoords(directory, latmin, latmax, lonmin, lonmax):
@@ -27,7 +28,7 @@ names_coords = get_filenamescoords(dir, -10, 10, -10, 10)
 
 print(np.shape(names_coords))
 
-os.chdir(dir)
+#os.chdir(dir)
 
-for file in names_coords:
-    shutil.copy(file, "E:/Thesis/data/data_ts_raw/Africa_11_11")
+#for file in names_coords:
+#    shutil.copy(file, "E:\Thesis\var\www\html\satex\data_per_pix\Africa_1010_1010")

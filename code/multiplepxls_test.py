@@ -12,7 +12,7 @@ import csv
 import re
 
 #path = "E:/Thesis/data/data_ts_raw/Africa_1010_1010"
-path = "C:/EVA/THESIS/code/testdata/"
+path = "C:/EVA/THESIS/code/testdata/1pxl/"
 
 def get_filepaths(dir):
     file_paths = []

@@ -1,0 +1,18 @@
+Information about the scripts
+
+GC_script.py
+    The script from github slightly modified (newest modules). Also added a way to use from other scripts.
+EVI_openhdfplot.py
+    open en plot EVI from te MODIS vegetation index product from a certain HDF file.
+findcoords_test_script.py
+    copy all file with coordinates in certain range to another map
+HDFtiles.py
+    download the file with the modis sinusoidal grid: coordinates and tiles
+    sn_bound_10deg.txt
+multiplepxls_test.py
+    run the GC_script for multiple pixels and write the output to csv files
+NDVIopen.py
+    test script to open NDVI files and access the data
+findcolnames.py
+    find the names of the columns that have infinity values.
+    varnames.csv / infcolumns.csv

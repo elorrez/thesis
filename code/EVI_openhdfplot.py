@@ -38,10 +38,14 @@ with rio.open(path) as ds:
                 modis_meta = subds.profile
                 EVI.append(subds.read(1))
 
-print(np.array(EVI).shape)
+EVI_a = np.array(EVI)
+print(EVI_a.shape)
 
-print(np.array(EVI)[0,1,1])
+print(EVI_a[0,1,1])
 
-ep.plot_bands(np.array(EVI))
-plt.show()
+print(EVI_a)
+
+print(np.where(np.isnan(EVI)))
+#ep.plot_bands(np.array(EVI))
+#plt.show()
 

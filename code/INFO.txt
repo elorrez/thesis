@@ -16,3 +16,10 @@ test_NDVI_ncopen.py
 findInfcols_script.py
     find the names of the columns that have infinity values.
     varnames.csv / infcolumns.csv
+
+EVI_listfiles.py
+    make a list with all path names of the hdf files in e certain directory
+EVI_mosaic.py
+    Make a mosaic of all the tiles for 1 timestamp and store as hdf file
+EVI_open.py
+    Open a certain hdf file and put values in array

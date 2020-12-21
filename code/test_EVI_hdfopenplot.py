@@ -30,6 +30,7 @@ with rio.open(path) as ds:
     for name in ds.subdatasets:
         print(name)
 
+
 EVI = []
 with rio.open(path) as ds:
     for name in ds.subdatasets:

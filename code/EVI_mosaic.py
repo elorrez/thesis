@@ -21,10 +21,10 @@ def EVI_timestamps(directory):
 def EVI_mosaic(directory):
     # This function makes a mosaic of all hdf tiles for each timestamp
     paths, unique_times = EVI_timestamps(directory)
-    subset = "MOD_Grid_monthly_1km_VI:1 km monthly EVI"
+    subset = "0 1 0 0 0 0 0 0 0 0 0"
 
     for time in unique_times:
         timestamp = [i for i in paths if time in i] # select all filenames with the time in the name
-        ms = createMosaicGDAL(timestamp, subset, outformat='HDF4Image')   # subset : MOD_Grid_monthly_1km_VI:1 km monthly EVI
-        ms.run(time)
+        ms = createMosaicGDAL(timestamp, subset, outformat='GTiff')   # subset : MOD_Grid_monthly_1km_VI:1 km monthly EVI
+        ms.run(time +'.tiff')
 

@@ -2,19 +2,13 @@
 
 from EVI_listfiles import listfilepaths
 import re
-import rasterio as rio
+from pyhdf.SD import SD, SDC
 import numpy as np
 
-def EVI_hdf2array(directory):
-    paths = listfilepaths(directory)
-    EVI = []
-    for path in paths:
-        with rio.open(path) as ds:
-            for name in ds.subdatasets:
-                if re.search("EVI", name):
-                    with rio.open(name) as subds:
-                        modis_meta = subds.profile
-                        EVI.append(subds.read(1))
-    return np.array(EVI)
+def EVI_hdf2array(path):
+    file = SD(path, SDC.READ)
+    sds_obj = file.select('1 km monthly EVI')  # select sds
+    EVI = sds_obj.get()
+    return EVI
 
 

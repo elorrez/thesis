@@ -6,7 +6,8 @@ import glob
 import re
 import os
 
-path = "C:/EVA/THESIS/data/EVI/todo/"
+inpath = "C:/EVA/THESIS/data/EVI/"
+outpath = "C:/EVA/THESIS/data/tiff_tweedekans/"
 
 # allhdf = listfilepaths(path)
 #
@@ -32,6 +33,6 @@ path = "C:/EVA/THESIS/data/EVI/todo/"
 # # ms.run("2000032.tiff")
 # p,t =EVI_timestamps(todo)
 # print(t)
-error = EVI_mosaic(path)
+error = EVI_mosaic(inpath, outpath)
 
 print(error)

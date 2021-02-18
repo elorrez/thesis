@@ -23,3 +23,6 @@ EVI_mosaic.py
     Make a mosaic of all the tiles for 1 timestamp and store as hdf file
 EVI_open.py
     Open a certain hdf file and put values in array
+
+filenamesGrid.csv
+    csv with the pxl coordinates from the dataset in the tile mosaic

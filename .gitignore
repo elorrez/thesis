@@ -3,6 +3,7 @@
 .netrc
 /literatuur
 *.pdf
+*.html
 /code/.idea
 /code/SelectCoords/.idea
 /code/__pycache__
@@ -10,3 +11,4 @@
 /code/testdata
 /code/downloadxmllinks.csv
 /code/downloadlinks.txt
+/code/xmltodo.csv

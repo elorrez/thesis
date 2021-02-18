@@ -2,9 +2,7 @@ import os
 import glob
 import re
 import numpy as np
-import shutil
-import csv
-#dir = "E:/Thesis/data/large_dataset/var/www/html/satex/data_per_pix"
+
 dir = "E:/Thesis/data/data_ts_raw"
 
 def get_filenamescoords(directory, latmin, latmax, lonmin, lonmax):
@@ -23,16 +21,16 @@ def get_filenamescoords(directory, latmin, latmax, lonmin, lonmax):
             file_names.append(str(lat) +", "+ str(lon))  # Add it to the list.
     return file_names
 
-#Run the above function and store its results in a variable.
-# names_coords = get_filenamescoords(dir, -10, 10, 0, 40.6255)
-# print(names_coords)
-# To copy all the files with these names to another folder:
+names_coords = get_filenamescoords(dir, -10, 10, 10, 30.4713)
 
-#os.chdir(dir)
-#for file in names_coords:
-#    shutil.copy(file, "E:\Thesis\var\www\html\satex\data_per_pix\modisgridEVI")
+print(np.shape(names_coords))
+print(names_coords)
 
-# write csv with the file names
-# with open("C:/EVA/THESIS/code/filenamesGrid.csv", 'w',newline='') as outfile:
-#     writer = csv.writer(outfile, delimiter=',')
-#     writer.writerows(names_coords)
+coordinates = []
+for name in names_coords:
+    lat = float(name.split(',')[0])
+    lon = float(name.split(',')[1])
+    coordinates.append(f"{lat},{lon} \n")
+
+with open("C:/EVA/THESIS/code/files/low_resolution_grid_coords_center.csv", 'w+') as lowres_coords:
+    lowres_coords.writelines(coordinates)

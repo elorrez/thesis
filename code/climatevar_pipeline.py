@@ -134,4 +134,11 @@ add_lag_cum_vars(inpath, outpath)
 # Totaal: 01/2001 - 08/2019
 # De eerste 12 maanden worden weggelaten door de lagged en cumulatieve variabelen
 #
+from create_full_dataset import create_full_datset
+
+outpath = "C:/EVA/THESIS/data/full_datasets/"
+
+create_full_datset(outpath)
+
+
 

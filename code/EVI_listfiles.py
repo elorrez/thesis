@@ -34,6 +34,14 @@ def listcoords_csv(directory):
         coords.append(coord)
     return coords
 
+def listfilenames_csv(directory):
+    os.chdir(directory)
+    files = []
+    for file in glob.glob("*.csv"):
+        #path = os.path.join(directory, file)
+        files.append(file)
+    return files
+
 def listfilepaths_nc(directory):
     os.chdir(directory)
     paths = []

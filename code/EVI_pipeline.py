@@ -44,8 +44,8 @@
 
 from EVI_mosaic import EVI_mosaic
 
-inpath = "C:/EVA/THESIS/data/EVI/"
-outpath = "C:/EVA/THESIS/data/EVI_mosaic/"
+inpath = "C:/EVA/THESIS/data/EVI/raw"
+outpath = "C:/EVA/THESIS/data/EVI/mosaic/"
 
 error = EVI_mosaic(inpath, outpath)
 
@@ -83,9 +83,9 @@ error = EVI_mosaic(inpath, outpath)
 
 from quality_control import mask_EVI
 
-inpath = "C:/EVA/THESIS/data/EVI_mosaic/"
-outpath = "C:/EVA/THESIS/data/EVI_quality_controlled/"
-outpath_masks = "C:/EVA/THESIS/data/quality_masks/"
+inpath = "C:/EVA/THESIS/data/EVI/mosaic/"
+outpath = "C:/EVA/THESIS/data/EVI/quality_controlled/"
+outpath_masks = "C:/EVA/THESIS/data/EVI/quality_masks/"
 lookup_csv = 'C:/EVA/THESIS/Code/files/MOD13A3-006-1-km-monthly-VI-Quality-lookup.csv'
 
 mask_EVI(lookup_csv, inpath, outpath, outpath_masks)
@@ -101,8 +101,8 @@ mask_EVI(lookup_csv, inpath, outpath, outpath_masks)
 
 from Lower_Resolution import lower_resolution
 
-inpath = "C:/EVA/THESIS/data/EVI_quality_controlled/"
-outpath = "C:/EVA/THESIS/data/EVI_low_resolution/"
+inpath = "C:/EVA/THESIS/data/EVI/quality_controlled/"
+outpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
 
 lower_resolution(inpath, outpath)
 
@@ -131,7 +131,7 @@ lower_resolution(inpath, outpath)
 
 from anomaly_decomposition import anomaly_decomposition
 
-inpath = 'C:/EVA/THESIS/data/EVI_time_series/'
-outpath = 'C:/EVA/THESIS/data/EVI_anomaly_time_series/'
+inpath = 'C:/EVA/THESIS/data/EVI/time_series/'
+outpath = 'C:/EVA/THESIS/data/EVI/anomaly_time_series/'
 
 anomaly_decomposition(inpath, outpath)

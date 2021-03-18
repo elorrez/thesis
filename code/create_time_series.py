@@ -1,10 +1,10 @@
 import rasterio as rio
 import numpy as np
 
-from EVI_listfiles import listfilepaths_tiff
+from list_files_in_directory import listfilepaths_tiff
 
-inpath = "C:/EVA/THESIS/data/EVI_low_resolution/"
-outpath = "C:/EVA/THESIS/data/EVI_time_series/"
+inpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
+outpath = "C:/EVA/THESIS/data/EVI/time_series/"
 
 paths = listfilepaths_tiff(inpath)
 
@@ -22,7 +22,7 @@ for path in paths:
         print(np.shape(evi))
 
         for x in range(40):
-            for idx, y in enumerate(range(-10, 10)):
+            for idx, y in enumerate(range(10, -10,-1)):
                 name = f"evi_{y + 0.5},{x + 0.5}.csv"
                 with open(outpath + name, 'a+') as f:
                     f.write(f"{timestamp},{evi[idx][x]}\n")

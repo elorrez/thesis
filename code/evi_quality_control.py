@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import rasterio as rio
-from EVI_listfiles import listfilepaths_tiff
+from list_files_in_directory import listfilepaths_tiff
 
 def make_qualityMask(lookup_csv):
     # Read in the look up table

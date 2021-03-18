@@ -3,7 +3,7 @@
 
 from shutil import copyfile
 import pandas as pd
-from EVI_listfiles import listcoords_csv
+from list_files_in_directory import listcoords_csv
 
 evi_pixels = listcoords_csv("C:/EVA/THESIS/data/EVI_time_series/")
 df = pd.read_csv("C:/EVA/THESIS/code/files/low_resolution_grid_coords.csv", header=None)

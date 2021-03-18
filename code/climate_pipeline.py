@@ -43,7 +43,7 @@ GPCC_pre_full_array = netcdf_to_arraylowres(inpath)
 # Now we have 1 array with dimensions 228, 20, 40. We want to make one array for each pixel (20*40=800 pixels). With
 # rows for each timestamp (=228 rows)
 
-from climatevar_timeseries import time_series_to_csv
+from climate_timeseries import time_series_to_csv
 # CRU_HR_tmp
 outpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_raw/"
 time_series_to_csv(tmp_full_array, outpath)
@@ -63,7 +63,7 @@ time_series_to_csv(GPCC_pre_full_array, outpath)
 # 3. Anomaly decomposition
 # FILES: climatevar_anomaly_decomposition.py, EVI_listfiles.py
 # detrended = raw - trend and anomaly = detrended - seasonal cycle
-from climatevar_anomaly_decomposition import climatevar_anomaly_decomposition
+from climate_anomaly_decomposition import climatevar_anomaly_decomposition
 
 # CRU_HR_tmp
 inpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_raw/"
@@ -98,7 +98,7 @@ climatevar_anomaly_decomposition(inpath, outpath)
 # name_cum_2
 # name_cum_3
 # ... name_cum_12
-from add_lagged_and_cumulative_vars import add_lag_cum_vars
+from climate_lagged_and_cumulative_vars import add_lag_cum_vars
 
 # CRU_HR_tmp
 inpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_anomalies/"
@@ -120,7 +120,6 @@ inpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_anomalies/"
 outpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_lagged/"
 add_lag_cum_vars(inpath, outpath)
 
-
 # 5. Merge the datasets into 1 dataset per pixel
 # FILES:
 #
@@ -135,7 +134,7 @@ add_lag_cum_vars(inpath, outpath)
 # De eerste 12 maanden worden weggelaten door de lagged en cumulatieve variabelen
 #
 
-from create_full_dataset import create_full_datset
+from climate_create_full_dataset import create_full_datset
 outpath = "C:/EVA/THESIS/data/full_datasets/"
 create_full_datset(outpath)
 

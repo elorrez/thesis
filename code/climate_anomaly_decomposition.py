@@ -3,7 +3,7 @@
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
-from EVI_listfiles import listcoords_csv
+from list_files_in_directory import listcoords_csv
 
 def climatevar_anomaly_decomposition(inpath, outpath):
     for coords in listcoords_csv(inpath):

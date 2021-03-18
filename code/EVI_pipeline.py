@@ -42,7 +42,7 @@
 # The name of the new files is the same timestamp as the raw hdf files e.g. 2000032.tiff
 # So we create 251 .tiff files and 251 .xml files with metadata
 
-from EVI_mosaic import EVI_mosaic
+from evi_mosaic import EVI_mosaic
 
 inpath = "C:/EVA/THESIS/data/EVI/raw"
 outpath = "C:/EVA/THESIS/data/EVI/mosaic/"
@@ -81,7 +81,7 @@ error = EVI_mosaic(inpath, outpath)
 # - amount of bad pixels (pixels that get true label in masked EVI)
 # - amount of NoData pixels in the EVI layer
 
-from quality_control import mask_EVI
+from evi_quality_control import mask_EVI
 
 inpath = "C:/EVA/THESIS/data/EVI/mosaic/"
 outpath = "C:/EVA/THESIS/data/EVI/quality_controlled/"
@@ -120,8 +120,8 @@ lower_resolution(inpath, outpath)
 # we take the intersection of both lists with coordinates. In the end 551 pixels are in both datasets. We copy the
 # csv files with the right coordinates to another folder: EVI_time_series_intersection)
 
-# inpath = "C:/EVA/THESIS/data/EVI_low_resolution/"
-# outpath = "C:/EVA/THESIS/data/EVI_time_series/"
+#inpath = "C:/EVA/THESIS/data/EVI_low_resolution/"
+#outpath = "C:/EVA/THESIS/data/EVI_time_series/"
 
 # 6. Anomaly decomposition
 # FILES: anomaly_decomposition.py
@@ -129,7 +129,7 @@ lower_resolution(inpath, outpath)
 # We want to work with the anomalies, to do this we need to subtract the linear trend and seasonal cycle from the
 # raw data. These will be stored in the csv files as collumns
 
-from anomaly_decomposition import anomaly_decomposition
+from evi_anomaly_decomposition import anomaly_decomposition
 
 inpath = 'C:/EVA/THESIS/data/EVI/time_series/'
 outpath = 'C:/EVA/THESIS/data/EVI/anomaly_time_series/'

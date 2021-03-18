@@ -1,8 +1,8 @@
 
 import csv
 
-from EVI_listfiles import listfilenames_csv
-from GC_script import run_GC_script
+from list_files_in_directory import listfilenames_csv
+from analysis_GC_script import run_GC_script
 
 # inpath = "C:/EVA/THESIS/data/full_datasets/"
 # outpath = "C:/EVA/THESIS/data/analyse_test1/"

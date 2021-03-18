@@ -1,7 +1,7 @@
-from EVI_mosaic import EVI_mosaic
+from evi_mosaic import EVI_mosaic
 from pymodis.convertmodis_gdal import createMosaicGDAL
-from EVI_mosaic import EVI_timestamps
-from EVI_listfiles import listfilepaths
+from evi_mosaic import EVI_timestamps
+from evi_mosaic import listfilepaths
 import glob
 import re
 import os

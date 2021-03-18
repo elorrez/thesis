@@ -1,8 +1,8 @@
 # Add the different climate variables and the EVI together in a full dataset per pixel
 import pandas as pd
 
-from EVI_listfiles import listfilenames_csv
-from EVI_listfiles import listcoords_csv
+from list_files_in_directory import listfilenames_csv
+from list_files_in_directory import listcoords_csv
 
 def create_full_datset(outpath):
     in_EVI = "C:/EVA/THESIS/data/EVI/anomaly_time_series/"

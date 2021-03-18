@@ -1,7 +1,7 @@
 # add 22 columns to the csv files with lagged and cumulative variables.
 import pandas as pd
 
-from EVI_listfiles import listcoords_csv
+from list_files_in_directory import listcoords_csv
 
 def create_lagged_vars(df, lag):
     new_dict ={}

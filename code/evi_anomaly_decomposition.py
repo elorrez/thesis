@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-from EVI_listfiles import listcoords_csv
+from list_files_in_directory import listcoords_csv
 
 def anomaly_decomposition(inpath, outpath):
     # plot raw data

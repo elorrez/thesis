@@ -2,7 +2,7 @@ import rasterio as rio
 import numpy as np
 from skimage.util.shape import view_as_windows
 
-from EVI_listfiles import listfilepaths_tiff
+from list_files_in_directory import listfilepaths_tiff
 
 # inpath = "C:/EVA/THESIS/code/testdata/mosaic_quality_controlled/2000032_qc.tiff"
 

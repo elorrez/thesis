@@ -1,7 +1,7 @@
 # Functions to extract netcdf to array and merge 2 time series (2000-2010 and 2011-2019)
 
 import netCDF4 as nc
-from EVI_listfiles import listfilepaths_nc
+from list_files_in_directory import listfilepaths_nc
 import numpy as np
 import matplotlib.pyplot as plt
 

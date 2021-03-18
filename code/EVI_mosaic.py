@@ -1,6 +1,6 @@
 # Make a mosaic of all tiles from the same timestamp
 
-from EVI_listfiles import listfilepaths
+from list_files_in_directory import listfilepaths
 import re
 import numpy as np
 from pymodis.convertmodis_gdal import createMosaicGDAL

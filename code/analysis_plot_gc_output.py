@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 plt.style.use('seaborn-white')
 
-from EVI_listfiles import listfilenames_csv
+from list_files_in_directory import listfilenames_csv
 
 inpath = "C:/EVA/THESIS/data/analyse_test2/"
 

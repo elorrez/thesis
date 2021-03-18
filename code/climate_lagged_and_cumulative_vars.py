@@ -45,7 +45,8 @@ def add_lag_cum_vars(inpath, outpath):
         #print(col_drop)
         df = df_full.drop(col_drop, axis=1)
 
-        #print(df.columns)
+        # Remove duplicate columns
+        df = df.loc[:, ~df.columns.duplicated()]
 
         # Write to csv
         df.to_csv(outpath + f"{var}_lag_{coords}.csv", index=None)

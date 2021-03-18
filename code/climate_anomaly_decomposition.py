@@ -21,10 +21,11 @@ def climatevar_anomaly_decomposition(inpath, outpath):
 
         # 2. anomalies = detrended - seasonal cycle
         # seasonal cycle: average of month over all years --> 12 averages (one for each month)
-        df['month'] = [i for i in range(1, 13)] * 19
-
-        # ERA (4 months missing:
-        #df['month'] = [i for i in range(1, 13)] * 18 + [i for i in range(1, 9)]
+        # ERA (4 months missing):
+        if 'ERA' in inpath:
+            df['month'] = [i for i in range(1, 13)] * 18 + [i for i in range(1, 9)]
+        else:
+            df['month'] = [i for i in range(1, 13)] * 19
 
         monthly_avg = df.groupby('month').mean()['detrended']
         df = df.join(monthly_avg, on='month', rsuffix='_avg')

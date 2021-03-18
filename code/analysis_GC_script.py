@@ -119,7 +119,7 @@ def run_GC_script(inpath, GC_mode):
     data = readFile(inpath)
 
     X = data[:,2:data.shape[1]-1] #exclude the first column because it is the timestamp column
-    y = data[:,data.shape[1]-1] #the target variable is the last column
+    y = data[:,data.shape[1]-1] # the target variable is the last column
 
     X1 = createAuto(y) #take the autocorrelation features
     X = np.concatenate((X,X1), axis=1)

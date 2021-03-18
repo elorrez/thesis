@@ -8,7 +8,7 @@ plt.style.use('seaborn-white')
 
 from list_files_in_directory import listfilenames_csv
 
-inpath = "C:/EVA/THESIS/data/analyse_test2/"
+inpath = "C:/EVA/THESIS/data/analyse_test3/"
 
 def create_array_from_pixels(inpath, colname):
     output_array = np.empty([20,40])

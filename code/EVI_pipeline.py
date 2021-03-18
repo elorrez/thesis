@@ -12,10 +12,11 @@
 # - Unknown number, always 006
 # - Unknown date
 # We are only interested in the data from central Africa so we download the data for 8 tiles: h18 - h21, v08 & v09
-# There is 1 datafile per month. We are interested in data from 2000 till 2021. So 21 years x 12 months = 252 timestamps
+# There is 1 datafile per month. We are interested in data from 2000 till 2021. So 21 years x 12 months = 252 timestamps,
+# januari 2000 is missing. So in total 251 timestamps.
 # In total we have 8 tiles x 251 timestamps = 2008 snapshots (=hdf files).
 #
-# FILE: Read_HDFMetadata.py
+# FILE: evi_read_hdf_metadata.py
 #
 # Every hdf file is also accompanied by an xml file with metadata.
 # Every hdf file consists of several layers:
@@ -32,9 +33,10 @@
 # - sun zenith angle
 
 # 2. Create mosaic for every month
-# FILES: EVI_mosaic.py, EVI_listfiles.py
+# FILES: evi_mosaic.py, list_files_in_directory.py
 #
-# We make a mosaic of the 8 tiles at every timestamp with 3 layers:
+# We make a mosaic of the 8 tiles at every timestamp, making a map of the complete extent of our study area: latitude -10,10 and longitude 0,40
+# with 3 layers:
 # - pixel reliability
 # - EVI
 # - VI Quality
@@ -50,13 +52,13 @@ outpath = "C:/EVA/THESIS/data/EVI/mosaic/"
 error = EVI_mosaic(inpath, outpath)
 
 # 3. Quality control
-# FILES: quality_control.py, EVI_listfiles.py
+# FILES: quality_control.py, list_files_in_directory.py
 #
 # We control the EVI value for the pixel quality by applying following process (see: C:/EVA/THESIS/AppEEARS_NC_QualityFiltering_Python_xjLPKVr.html):
 # Import the lookup table (a csv file  from an AppEEARS request, value refers to the pixel values of the VI quality
 # layer, followed by the specific bit)( AppEEARS decodes each binary quality bit-field into more meaningful
 # information for the user.)
-# Select the parameters and conditions you want the quality of the data to meet. In this case:
+# Select the parameters and conditions you want the quality of the data to meet. In this case we use the ones suggested in the linked document:
 # 1. MODLAND_QA flag = 0 or 1
 #     0 = good quality
 #     1 = check other QA
@@ -91,15 +93,15 @@ lookup_csv = 'C:/EVA/THESIS/Code/files/MOD13A3-006-1-km-monthly-VI-Quality-looku
 mask_EVI(lookup_csv, inpath, outpath, outpath_masks)
 
 # 4. Lower resolution
-# FILES: Lower_Resolution.py, EVI_listfiles.py
+# FILES: evi_lower_resolution.py, list_files_in_directory.py
 #
-# The original dataset from the phd with all the climate variables has a spatial resolution of 1°. The EVI data has a
-# spatial resolution of 1 km. To fit the EVI data into the original dataset we have to lower the resolution. To do this,
-# we made an empty grid with the right dimensions (20, 40), which is degrees. Then, we divided the image in submatrices of the right size
+# The evi data has a spatial resolution of 1 km. To combine it with the climate data in one dataset, we need to lower the resolution to 1°.
+# To do this we made an empty grid with the right dimensions (20, 40), (1° resolution). Then, we divided the image in submatrices of the right size
 # (kernel: 120 x 120). For each submatrix we calculated the mean of the values > 0 (important!) and filled this value in
-# the empty 20x40 grid. The output files have names e.g. 2000032_lr.tiff and are in the folder 'EVI_low_resolution'
+# the empty 20x40 grid.
+# The output files have names e.g. 2000032_lr.tiff and are in the folder 'EVI/low_resolution'
 
-from Lower_Resolution import lower_resolution
+from evi_lower_resolution import lower_resolution
 
 inpath = "C:/EVA/THESIS/data/EVI/quality_controlled/"
 outpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
@@ -107,27 +109,39 @@ outpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
 lower_resolution(inpath, outpath)
 
 # 5. Create time series per pixel
-# FILES: create_time_series.py, EVI_listfiles.py, compare_pixels_script.py
+# FILES: create_time_series.py, list_files_in_directory.py
 #
 # The final dataset consists out of one time series per pixel (csv file). To merge the EVI into this dataset, we
-# create a time series for the EVI for each pixel. We make an artificial coordinate system of lat: -10 to 10 and
+# create a time series for each pixel. We make an artificial coordinate system of lat: -10 to 10 and
 # lon: 0 to 40 (isn't completely right, but okay). We end up with 800 csv files (800 pixels = 40*20) with each 251 rows
-# (= # of months) and two collumns: timestamp and EVI. The output has name e.g. evi_0.5,0.5.csv in
+# (= # of months) and two collumns: timestamp and EVI.
+# The output has name e.g. evi_0.5,0.5.csv in
 # folder: EVI_time_series
-#
-# WRONG: we are not working with the original dataset anymore (The original dataset only has 562 pixels in this area
-# (lat: -10, 10, lon: 0, 40.6). To end up with the same pixels,
-# we take the intersection of both lists with coordinates. In the end 551 pixels are in both datasets. We copy the
-# csv files with the right coordinates to another folder: EVI_time_series_intersection)
 
-#inpath = "C:/EVA/THESIS/data/EVI_low_resolution/"
-#outpath = "C:/EVA/THESIS/data/EVI_time_series/"
+from evi_create_time_series import create_time_series
+
+inpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
+outpath = "C:/EVA/THESIS/data/EVI/time_series/"
+create_time_series(inpath, outpath)
+
 
 # 6. Anomaly decomposition
 # FILES: anomaly_decomposition.py
 #
-# We want to work with the anomalies, to do this we need to subtract the linear trend and seasonal cycle from the
-# raw data. These will be stored in the csv files as collumns
+# We want to do the analysis on anomalies of evi, not on the raw data. The anomalies are calculated in the following way:
+# 1: Subtract long term trend from the raw data: detrended = raw - trend
+# 2: Subtract the seasonal cycle from the detrended data: anomaly = detrended - seasonal
+# The long term trend is a linear function with time as x
+# The seasonal cycle is the average per month over the years.
+# The output is a csv file with the following columns:
+# - 'timestamp'
+# - 'year'
+# - 'month'
+# - 'evi'
+# - 'trend'
+# - 'detrended'
+# - 'detrended_avg'
+# - 'anomaly'
 
 from evi_anomaly_decomposition import anomaly_decomposition
 

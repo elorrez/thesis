@@ -1,7 +1,9 @@
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.impute import SimpleImputer
 
 from list_files_in_directory import listcoords_csv
 
@@ -12,7 +14,7 @@ def anomaly_decomposition(inpath, outpath):
         df = pd.read_csv(f"evi_{coords}.csv", header=None, names=['timestamp', 'evi'])
         # plt.plot(df.index, df['evi'])
         # plt.show()
-
+        df['evi'].replace(-3000, df['evi'].mean(), inplace=True)
 
         # 1. detrended = raw data - linear trend
         # linear trend: ordinary least squares ?
@@ -57,8 +59,19 @@ def anomaly_decomposition(inpath, outpath):
         df = df.join(monthly_avg, on='month', rsuffix='_avg')
         df['anomaly'] = df['detrended'] - df['detrended_avg']
 
-        cols = ['timestamp', 'year', 'month', 'evi', 'trend', 'detrended', 'detrended_avg', 'anomaly']
+        df['absolute_anomaly'] = df['anomaly'].abs()
+
+
+        cols = ['timestamp', 'year', 'month', 'evi', 'trend', 'detrended', 'detrended_avg', 'absolute_anomaly']
         df = df[cols]
         df.to_csv(outpath + f"evi_anom_{coords}.csv", header=None, index=None)
         # plt.plot(df.index, df['anomaly'])
         # plt.show()
+
+# inpath = "C:/EVA/THESIS/data/EVI/time_series/"
+# coords = listcoords_csv(inpath)
+#
+# df = pd.read_csv(f"evi_{coords[0]}.csv", header=None, names=['timestamp', 'evi'])
+# print(df['evi'].replace(-3000, np.nan))
+# #print(df['evi'])
+

@@ -60,6 +60,7 @@ def readFile(inpath):
         #replace by taking the mean of every column ignoring nan values
         rmvedCols = np.nanmean(dataset, axis=0)
         idxRmved = np.where(np.isnan(rmvedCols))#take the indices of the nan columns
+        print(idxRmved)
         nanTarget = dataset.shape[1]-1 in idxRmved[0]#check if the target is a nan column
         if nanTarget:
             raise ValueError("The target variable contains only nan values or inf")
@@ -91,7 +92,7 @@ def crossValidation(X, y, cvFolds, estimator):
         train_y = y[train_index]
         test_y = y[test_index]
         estimator.fit(train_X,train_y)
-        y_true, y_pred = test_y,estimator.predict(test_X)
+        y_true, y_pred = test_y, estimator.predict(test_X)
         r2[cv_j] = r2_score(y_true, y_pred)
         cv_j = cv_j + 1
     return r2

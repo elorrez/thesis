@@ -5,7 +5,7 @@ from list_files_in_directory import listfilenames_csv
 from list_files_in_directory import listcoords_csv
 
 def create_full_datset(outpath):
-    in_EVI = "C:/EVA/THESIS/data/EVI/anomaly_time_series/"
+    in_EVI = "C:/EVA/THESIS/data/EVI/absolute_anomaly_time_series/"
     in_CRU_HR_tmp = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_lagged/"
     in_CRU_HR_pre = "C:/EVA/THESIS/data/Climate_data/CRU_HR_pre/time_series_lagged/"
     in_ERA_rad = "C:/EVA/THESIS/data/Climate_data/ERA_rad/time_series_lagged/"
@@ -22,8 +22,8 @@ def create_full_datset(outpath):
     for coord in range(len(list_EVI)):
         coordinates = coordinates_list[coord]
         print(coordinates)
-        EVI = pd.read_csv(in_EVI+list_EVI[coord], names = ['timestamp', 'year', 'month', 'evi', 'trend', 'detrended', 'detrended_avg', 'anomaly'])
-        col_drop_EVI = ['timestamp','year','month']
+        EVI = pd.read_csv(in_EVI+list_EVI[coord], names = ['timestamp', 'year', 'month', 'evi', 'trend', 'detrended', 'detrended_avg', 'absolute_anomaly'])
+        col_drop_EVI = ['timestamp','year','month', 'evi', 'detrended']
         EVI.drop(col_drop_EVI, axis = 1, inplace=True)
         #print(EVI.head())
 
@@ -66,9 +66,12 @@ def create_full_datset(outpath):
         # time.drop(range(0,12), axis = 0, inplace = True)
         #print(f'time:{time.shape}')
 
+
+
         df_full = pd.concat([time,CRU_tmp,CRU_pre, ERA_rad,GPCC_pre,EVI], axis=1)
         df_full.drop(range(224,240), axis = 0, inplace = True)
         df_full.drop(range(0,12), axis = 0, inplace = True)
         df_full.reset_index(drop=True, inplace=True)
+
 
         df_full.to_csv(outpath + f"{coordinates}.csv", index=None)

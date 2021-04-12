@@ -5,17 +5,17 @@ import numpy as np
 from list_files_in_directory import listfilenames_csv
 from analysis_GC_script import run_GC_script
 
-inpath = "C:/EVA/THESIS/data/full_datasets/"
-# #outpath = "C:/EVA/THESIS/data/analyse_test1/"
+#inpath = "C:/EVA/THESIS/data/full_datasets/"
+#outpath = "C:/EVA/THESIS/data/analyse_test1/"
 #
-df = pd.read_csv(inpath + listfilenames_csv(inpath)[10], header=0)
+#df = pd.read_csv(inpath + listfilenames_csv(inpath)[10], header=0)
 # print(df.columns)
-data = df.values
+#data = df.values
 
-X = data[:, 2:data.shape[1] - 1]  # exclude the first column because it is the timestamp column
-y = data[:, data.shape[1] - 1]  # the target variable is the last column
-print(X)
-print(y)
+# X = data[:, 2:data.shape[1] - 1]  # exclude the first column because it is the timestamp column
+# y = data[:, data.shape[1] - 1]  # the target variable is the last column
+# print(X)
+# print(y)
 
 def write_ouput_analysis(inpath, outpath):
     for file in listfilenames_csv(inpath):

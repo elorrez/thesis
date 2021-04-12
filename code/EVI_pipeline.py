@@ -32,6 +32,8 @@
 # - view zenith angle
 # - sun zenith angle
 
+# the EVI values have been multiplied with 10000 so we don't have to work with float values.
+
 # 2. Create mosaic for every month
 # FILES: evi_mosaic.py, list_files_in_directory.py
 #
@@ -124,6 +126,26 @@ inpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
 outpath = "C:/EVA/THESIS/data/EVI/time_series/"
 create_time_series(inpath, outpath)
 
+# INBETWEEN: MISSING VALUES
+# FILE: evi_missing_values
+
+# find out which pixels have only nan values :
+from evi_missing_values import find_na_pixels
+inpath = "C:/EVA/THESIS/data/EVI/time_series/"
+all_na_values = find_na_pixels(inpath)
+
+# move the files of pixels with only na values to the folder "C:/EVA/THESIS/data/EVI/na_pixels"
+from evi_missing_values import move_to_na_folder
+inpath = r"C:/EVA/THESIS/data/EVI/time_series/"
+outpath = r"C:/EVA/THESIS/data/EVI/na_pixels/"
+move_to_na_folder(inpath,outpath, "C:/EVA/THESIS/code/files/evi_na_values_pixels_list.csv")
+
+# now, there are only 657 files ( = pixels left)
+
+# To handle missing values: before we do the anaomaly decomposition, we fill in the missing values with the mean of the collumn.
+# in the file evi_missing_values.py we loop over all the files in the EVI/time_series folder to find out how many
+# NA vlues (-3000) there are for each pixel (excluding the files that have all NA values).
+# Turns out there are no missing values in the other pixels!
 
 # 6. Anomaly decomposition
 # FILES: anomaly_decomposition.py
@@ -149,3 +171,18 @@ inpath = 'C:/EVA/THESIS/data/EVI/time_series/'
 outpath = 'C:/EVA/THESIS/data/EVI/anomaly_time_series/'
 
 anomaly_decomposition(inpath, outpath)
+
+
+# Time series with absolute anomalies
+inpath = 'C:/EVA/THESIS/data/EVI/time_series/'
+outpath = 'C:/EVA/THESIS/data/EVI/absolute_anomaly_time_series/'
+
+anomaly_decomposition(inpath, outpath)
+
+# evi_missing_values. py : make list with the missing values + make files with the right names to plot the output.
+# In the rest of the analysis we will exclude the files of which all values are NA, the coordinates of these pixels can
+# be found in the file: "C:/EVA/THESIS/code/files/evi_na_values_pixels_list.csv"
+# to plot the output of the analysis, we still need to fill in the gaps that have been made by excluding these pixels
+# tot do so, we make 143 csv files with the right names (coordinates of the file) with 8 cols (all = 0)
+from evi_missing_values import make_empty_output
+make_empty_output(all_na_values)

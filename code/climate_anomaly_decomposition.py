@@ -11,6 +11,13 @@ def climatevar_anomaly_decomposition(inpath, outpath):
         var = inpath.split('/')[-3]
         df = pd.read_csv(f"{var}_{coords}.csv", header=None, names=['timestamp', var])
 
+        if 'CRU_HR_pre' in var:
+            df[var].replace(0, df[var].mean(), inplace=True)
+        elif 'tmp' in var:
+            df[var].replace(0, df[var].mean(), inplace=True)
+        elif 'GPCC' in var:
+            df[var].replace(-99999.9921875, df[var].mean(), inplace=True)
+
         # 1. detrended = raw data - linear trend
         # linear trend: ordinary least squares ?
         df = df.reset_index()

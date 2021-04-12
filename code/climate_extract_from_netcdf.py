@@ -24,7 +24,7 @@ def netcdf_to_arraylowres(inpath):
 
 def netcdf_to_array(inpath):
     paths = listfilepaths_nc(inpath)
-    print(paths)
+    #print(paths)
     arrays = []
     for path in paths:
         ds = nc.Dataset(path)
@@ -48,3 +48,9 @@ def netcdf_to_array(inpath):
 # print(f"    2019: {rad_full_array[222,:,:].mean()}")
 # print(f"aug 2018: {rad_full_array[211,:,:].mean()}")
 # print(f"    2019: {rad_full_array[223,:,:].mean()}")
+
+# inpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/"
+# paths = listfilepaths_nc(inpath)
+#
+# ds = nc.Dataset(paths[0])
+# print(ds.dimensions)

@@ -45,6 +45,25 @@ rad_full_array = netcdf_to_array(inpath)
 inpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/"
 GPCC_pre_full_array = netcdf_to_arraylowres(inpath)
 
+# INBETWEEN: spatial interpolation
+# FILE: climate_spatial_interpolation.py
+
+# Before making the time series: spatial interpolation of missing values
+# CRU: missing value = 0
+# # ERA no missing values
+# # GPCC : missing value =-99999.9921875
+# The result from unpacking the netcdf files is an array for each variable with following dimensions:
+# -CRU_tmp: (228, 20, 40)
+# -CRU_pre: (228, 20, 40)
+# -GPCC_pre: (228, 20, 40)
+# -ERA_rad: (224, 20, 40)
+
+from climate_spatial_interpolation import interpolate_missing_values
+CRU_HR_tmp_interpolated_array = interpolate_missing_values(tmp_full_array, 0)
+CRU_HR_pre_interpolated_array = interpolate_missing_values(pre_full_array, 0)
+GPCC_pre_interpolated_array = interpolate_missing_values(GPCC_pre_full_array, -99999.9921875)
+
+
 # 2. Make a time series for each pxl
 # FILES: climate_time_series.py
 
@@ -59,11 +78,11 @@ GPCC_pre_full_array = netcdf_to_arraylowres(inpath)
 from climate_timeseries import time_series_to_csv
 # CRU_HR_tmp
 outpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_raw/"
-time_series_to_csv(tmp_full_array, outpath)
+time_series_to_csv(CRU_HR_tmp_interpolated_array, outpath)
 
 # CRU_HR_pre
 outpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_pre/time_series_raw/"
-time_series_to_csv(pre_full_array, outpath)
+time_series_to_csv(CRU_HR_pre_interpolated_array, outpath)
 
 # ERA_rad
 outpath = "C:/EVA/THESIS/data/Climate_data/ERA_rad/time_series_raw/"
@@ -71,7 +90,49 @@ time_series_to_csv(rad_full_array, outpath)
 
 # GPCC_pre
 outpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_raw/"
-time_series_to_csv(GPCC_pre_full_array, outpath)
+time_series_to_csv(GPCC_pre_interpolated_array, outpath)
+
+
+# IN BETWEEN: Check for missing values:
+# Which pixels have only missing values?
+# CRU 0 = NA --> # of pixels with all NA = 139
+# ERA no missing values
+# GPCC NA = -99999.9921875 --> # of pixels with all NA = 145
+# EVI NA: 143 pixels with all NA values
+# --> spatial interpolation (except for the pixels that were left out of the EVI dataset)
+# FILE: climate_missing_values.py
+
+# move the pixels that have all NA for evi to another folder
+from evi_missing_values import move_to_na_folder
+csv_pixels = "C:/EVA/THESIS/code/files/evi_na_values_pixels_list.csv"
+#CRU tmp
+inpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_raw/"
+outpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/na_pixels/"
+move_to_na_folder(inpath, outpath, csv_pixels)
+
+inpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_pre/time_series_raw/"
+outpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_pre/na_pixels/"
+move_to_na_folder(inpath, outpath, csv_pixels)
+
+inpath = "C:/EVA/THESIS/data/Climate_data/ERA_rad/time_series_raw/"
+outpath = "C:/EVA/THESIS/data/Climate_data/ERA_rad/na_pixels/"
+move_to_na_folder(inpath, outpath, csv_pixels)
+
+inpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_raw/"
+outpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/na_pixels/"
+move_to_na_folder(inpath, outpath, csv_pixels)
+
+# climate_compare_na_pixels.py: find the pixels that are still all NA values
+# compare the lists with coordinates with all na values (evi vs each climate variable) --> which pixels are NA for the climate variables, but not for evi?
+# CRU: 41 pixels intersection between evi NA pixels and CRUtmp/pre NA pixels --> 139-41 =98 pixels
+# GPCC: 142 pixels intersection between EVI NA pixels and GPCC pixels --> 145 - 143 = 2 pixels
+
+
+
+# which timestamps are missing?
+# temporal interpolation:
+# replace the missing value with the mean of all timestamps
+# FILE: climate_anomaly_decomposition.py
 
 # 3. Anomaly decomposition
 # FILES: climate_anomaly_decomposition.py, list_files_in_directory.py
@@ -101,6 +162,7 @@ inpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_raw/"
 outpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_anomalies/"
 climatevar_anomaly_decomposition(inpath, outpath)
 
+
 # 4. Calculate lagged and cumulative variables
 # FILES: climate_lagged_and_cumulative_vars.py, list_files_in_directory.py
 #
@@ -114,6 +176,7 @@ climatevar_anomaly_decomposition(inpath, outpath)
 # name_cum_2
 # name_cum_3
 # ... name_cum_12
+
 
 from climate_lagged_and_cumulative_vars import add_lag_cum_vars
 
@@ -153,7 +216,17 @@ add_lag_cum_vars(inpath, outpath)
 
 from climate_create_full_dataset import create_full_datset
 outpath = "C:/EVA/THESIS/data/full_datasets/"
+
+from climate_create_full_dataset import create_full_datset
+outpath = "C:/EVA/THESIS/data/full_dataset_absolute/"
+
 create_full_datset(outpath)
 
+
+# pixels with all the same value in the last column (should not be the case)
+from climate_missing_values import find_missing_value
+inpath = "C:/EVA/THESIS/data/full_datasets/"
+coordinates = find_missing_value(inpath)
+print(coordinates)
 
 

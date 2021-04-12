@@ -20,7 +20,7 @@ def create_time_series(inpath, outpath):
         print(timestamp)
         with rio.open(path) as ds:
             evi = ds.read(1)
-            print(np.shape(evi))
+
 
             for x in range(40):
                 for idx, y in enumerate(range(10, -10,-1)):
@@ -30,3 +30,6 @@ def create_time_series(inpath, outpath):
 
 
 files = listfilepaths_tiff(inpath)
+with rio.open(files[0]) as ds:
+    evi = ds.read(1)
+    print(evi[15,5])

@@ -4,11 +4,10 @@ import shutil
 # How to handle missing values in this dataset?
 # EVI missing value fill in values = -3000
 # on spatial resolution there are pixels for which every timestamp is NA e.g. water
-# there are also some timestamps with NA values.
-
+# Find out is there are also pixels with random timestamps = NA?
 # We will handle these two differently:
 # - the pixels with NA for each timestamp will be removed from the dataset (make list with the coordinate names for later)
-# - random timestamps with NA will be interpolated with the mean of all the timestamps of the pixel.
+# - random timestamps with NA
 
 from list_files_in_directory import listfilenames_csv
 from list_files_in_directory import listcoords_csv
@@ -18,7 +17,7 @@ from list_files_in_directory import listcoords_csv
 #inpath = "C:/EVA/THESIS/data/EVI/time_series/"
 
 def find_na_pixels(inpath):
-    all_na_list = []
+    all_na_list = ['-0.5,6.5', '-1.5,5.5', '-5.5,11.5', '-8.5,12.5', '-9.5,12.5', '5.5,1.5'] #ERA5 all NA pxls
     some_na_list = []
     for (coordinate, file) in zip(listcoords_csv(inpath) ,listfilenames_csv(inpath)):
         df = pd.read_csv(inpath + file, names = ['timestamp', 'evi'])
@@ -38,15 +37,6 @@ def find_na_pixels(inpath):
 #print(len(all_na_list))
 # In the other pixels there are no missing values
 
-# Make the csv files with 0 values to plot the output:
-
-def make_empty_output(coordinate_list):
-    output_zeros = [i for i in range(0,1)]*8
-    for coordinate in coordinate_list:
-        with open(f"C:/EVA/THESIS/data/EVI/empty_output_water_pixels/{coordinate}.csv", 'w+') as pixel_zeros:
-            writer = csv.writer(pixel_zeros)
-            writer.writerow(output_zeros)
-
 # Move the files of pixels with all NA values to a subfolder :
 
 # from C:/EVA/THESIS/data/EVI/time_series to C:/EVA/THESIS/data/EVI/time_series/na_pixels
@@ -63,3 +53,11 @@ def move_to_na_folder(inpath, outpath, csv_coordinates):
         file = f"{var}_{coordinate}.csv"
         shutil.move(inpath+file, outpath+file)
 
+# Make the csv files with 0 values to plot the output:
+
+def make_empty_output(coordinate_list):
+    output_zeros = [i for i in range(0,1)]*8
+    for coordinate in coordinate_list:
+        with open(f"C:/EVA/THESIS/data/EVI/empty_output_water_pixels/{coordinate}.csv", 'w+') as pixel_zeros:
+            writer = csv.writer(pixel_zeros)
+            writer.writerow(output_zeros)

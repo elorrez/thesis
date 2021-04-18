@@ -1,4 +1,4 @@
-# This pipeline does the pre-processing of the EO data to the data format we need
+# This pipeline does the pre-processing of the EVI data to the data format we need
 
 # 1. Get the data
 #
@@ -12,7 +12,7 @@
 # - Unknown number, always 006
 # - Unknown date
 # We are only interested in the data from central Africa so we download the data for 8 tiles: h18 - h21, v08 & v09
-# There is 1 datafile per month. We are interested in data from 2000 till 2021. So 21 years x 12 months = 252 timestamps,
+# There is 1 datafile per month. We are interested in data from 2000 untill 2021. So 21 years x 12 months = 252 timestamps,
 # januari 2000 is missing. So in total 251 timestamps.
 # In total we have 8 tiles x 251 timestamps = 2008 snapshots (=hdf files).
 #
@@ -37,8 +37,8 @@
 # 2. Create mosaic for every month
 # FILES: evi_mosaic.py, list_files_in_directory.py
 #
-# We make a mosaic of the 8 tiles at every timestamp, making a map of the complete extent of our study area: latitude -10,10 and longitude 0,40
-# with 3 layers:
+# We make a mosaic of the 8 tiles at every timestamp, making a map of the complete extent of our study area:
+# latitude -10,10 and longitude 0,40 with 3 layers:
 # - pixel reliability
 # - EVI
 # - VI Quality
@@ -54,13 +54,15 @@ outpath = "C:/EVA/THESIS/data/EVI/mosaic/"
 error = EVI_mosaic(inpath, outpath)
 
 # 3. Quality control
-# FILES: quality_control.py, list_files_in_directory.py
+# FILES: evi_quality_control.py, list_files_in_directory.py
 #
-# We control the EVI value for the pixel quality by applying following process (see: C:/EVA/THESIS/AppEEARS_NC_QualityFiltering_Python_xjLPKVr.html):
+# We control the EVI value for the pixel quality by applying following process
+# (see: C:/EVA/THESIS/code/files/AppEEARS_NC_QualityFiltering_Python_xjLPKVr.html):
 # Import the lookup table (a csv file  from an AppEEARS request, value refers to the pixel values of the VI quality
 # layer, followed by the specific bit)( AppEEARS decodes each binary quality bit-field into more meaningful
 # information for the user.)
-# Select the parameters and conditions you want the quality of the data to meet. In this case we use the ones suggested in the linked document:
+# Select the parameters and conditions you want the quality of the data to meet. In this case we use the ones suggested
+# in the linked document:
 # 1. MODLAND_QA flag = 0 or 1
 #     0 = good quality
 #     1 = check other QA
@@ -97,10 +99,10 @@ mask_EVI(lookup_csv, inpath, outpath, outpath_masks)
 # 4. Lower resolution
 # FILES: evi_lower_resolution.py, list_files_in_directory.py
 #
-# The evi data has a spatial resolution of 1 km. To combine it with the climate data in one dataset, we need to lower the resolution to 1°.
-# To do this we made an empty grid with the right dimensions (20, 40), (1° resolution). Then, we divided the image in submatrices of the right size
-# (kernel: 120 x 120). For each submatrix we calculated the mean of the values > 0 (important!) and filled this value in
-# the empty 20x40 grid.
+# The evi data has a spatial resolution of 1 km. To combine it with the climate data in one dataset, we need to lower
+# the resolution to 1°. To do this we made an empty grid with the right dimensions (20, 40), (1° resolution).
+# Then, we divided the image in submatrices of the right size (kernel: 120 x 120). For each submatrix we calculated the
+# mean of the values > 0 (important!) and filled this value in the empty 20x40 grid.
 # The output files have names e.g. 2000032_lr.tiff and are in the folder 'EVI/low_resolution'
 
 from evi_lower_resolution import lower_resolution
@@ -111,14 +113,13 @@ outpath = "C:/EVA/THESIS/data/EVI/low_resolution/"
 lower_resolution(inpath, outpath)
 
 # 5. Create time series per pixel
-# FILES: create_time_series.py, list_files_in_directory.py
+# FILES: evi_create_time_series.py, list_files_in_directory.py
 #
 # The final dataset consists out of one time series per pixel (csv file). To merge the EVI into this dataset, we
 # create a time series for each pixel. We make an artificial coordinate system of lat: -10 to 10 and
 # lon: 0 to 40 (isn't completely right, but okay). We end up with 800 csv files (800 pixels = 40*20) with each 251 rows
-# (= # of months) and two collumns: timestamp and EVI.
-# The output has name e.g. evi_0.5,0.5.csv in
-# folder: EVI_time_series
+# (= # of months) and two columns: timestamp and EVI.
+# The output has name e.g. evi_0.5,0.5.csv in folder: EVI/time_series
 
 from evi_create_time_series import create_time_series
 
@@ -127,28 +128,34 @@ outpath = "C:/EVA/THESIS/data/EVI/time_series/"
 create_time_series(inpath, outpath)
 
 # INBETWEEN: MISSING VALUES
-# FILE: evi_missing_values
+# FILE: evi_missing_values.py
 
-# find out which pixels have only nan values :
+# find out which pixels have only nan values, these are the pixels where there is water and there is no EVI value:
 from evi_missing_values import find_na_pixels
 inpath = "C:/EVA/THESIS/data/EVI/time_series/"
 all_na_values = find_na_pixels(inpath)
 
+# In other pixels there are no time stamps with NAN values
+
 # move the files of pixels with only na values to the folder "C:/EVA/THESIS/data/EVI/na_pixels"
+# (I could also actually just delete them, but just to be sure)
 from evi_missing_values import move_to_na_folder
-inpath = r"C:/EVA/THESIS/data/EVI/time_series/"
-outpath = r"C:/EVA/THESIS/data/EVI/na_pixels/"
+inpath = "C:/EVA/THESIS/data/EVI/time_series/"
+outpath = "C:/EVA/THESIS/data/EVI/na_pixels/"
 move_to_na_folder(inpath,outpath, "C:/EVA/THESIS/code/files/evi_na_values_pixels_list.csv")
 
 # now, there are only 657 files ( = pixels left)
 
-# To handle missing values: before we do the anaomaly decomposition, we fill in the missing values with the mean of the collumn.
-# in the file evi_missing_values.py we loop over all the files in the EVI/time_series folder to find out how many
-# NA vlues (-3000) there are for each pixel (excluding the files that have all NA values).
-# Turns out there are no missing values in the other pixels!
+# evi_missing_values. py : make list with the missing values + make files with the right names to plot the output.
+# In the rest of the analysis we will exclude the files of which all values are NA, the coordinates of these pixels can
+# be found in the file: "C:/EVA/THESIS/code/files/evi_na_values_pixels_list.csv"
+# to plot the output of the analysis, we still need to fill in the gaps that have been made by excluding these pixels
+# tot do so, we make 143 csv files with the right names (coordinates of the file) with 8 cols (all = 0)
+from evi_missing_values import make_empty_output
+make_empty_output(all_na_values)
 
 # 6. Anomaly decomposition
-# FILES: anomaly_decomposition.py
+# FILES: evi_anomaly_decomposition.py
 #
 # We want to do the analysis on anomalies of evi, not on the raw data. The anomalies are calculated in the following way:
 # 1: Subtract long term trend from the raw data: detrended = raw - trend
@@ -171,18 +178,3 @@ inpath = 'C:/EVA/THESIS/data/EVI/time_series/'
 outpath = 'C:/EVA/THESIS/data/EVI/anomaly_time_series/'
 
 anomaly_decomposition(inpath, outpath)
-
-
-# Time series with absolute anomalies
-inpath = 'C:/EVA/THESIS/data/EVI/time_series/'
-outpath = 'C:/EVA/THESIS/data/EVI/absolute_anomaly_time_series/'
-
-anomaly_decomposition(inpath, outpath)
-
-# evi_missing_values. py : make list with the missing values + make files with the right names to plot the output.
-# In the rest of the analysis we will exclude the files of which all values are NA, the coordinates of these pixels can
-# be found in the file: "C:/EVA/THESIS/code/files/evi_na_values_pixels_list.csv"
-# to plot the output of the analysis, we still need to fill in the gaps that have been made by excluding these pixels
-# tot do so, we make 143 csv files with the right names (coordinates of the file) with 8 cols (all = 0)
-from evi_missing_values import make_empty_output
-make_empty_output(all_na_values)

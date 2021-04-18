@@ -35,10 +35,3 @@ def plot_EVI_time_series(inpath, coordinates):
 
 
 
-inpath = "C:/EVA/THESIS/data/EVI/anomaly_time_series/"
-coordinates = ["7.5,5.5", "7.5,15.5", "7.5,25.5", "7.5,35.5",
-               "2.5,5.5", "2.5,15.5", "2.5,25.5", "2.5,35.5",
-               "-2.5,5.5", "-2.5,15.5", "-2.5,25.5", "-2.5,35.5",
-               "-7.5,5.5", "-7.5,15.5", "-7.5,25.5", "-7.5,35.5"
-               ]
-plot_EVI_time_series(inpath,coordinates)

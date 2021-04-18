@@ -13,7 +13,6 @@ with rio.open(path) as ds:
     print(ds)
 print(ds_meta)
 
-
 with rio.open(path) as ds:
     for name in ds.subdatasets:
          print(name)

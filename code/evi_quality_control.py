@@ -3,6 +3,37 @@ import numpy as np
 import rasterio as rio
 from list_files_in_directory import listfilepaths_tiff
 
+# We control the EVI value for the pixel quality by applying following process
+# (see: C:/EVA/THESIS/code/files/AppEEARS_NC_QualityFiltering_Python_xjLPKVr.html):
+# Import the lookup table (a csv file  from an AppEEARS request, value refers to the pixel values of the VI quality
+# layer, followed by the specific bit)( AppEEARS decodes each binary quality bit-field into more meaningful
+# information for the user.)
+# Select the parameters and conditions you want the quality of the data to meet. In this case we use the ones suggested
+# in the linked document:
+# 1. MODLAND_QA flag = 0 or 1
+#     0 = good quality
+#     1 = check other QA
+# 2. VI usefulness <= 11
+#     0000    Highest quality = 0
+#     0001    Lower quality = 1
+#     0010    Decreasing quality = 2
+#     ...
+#     1011   Decreasing quality = 11
+# 3. Adjacent cloud detected, Mixed Clouds, and Possible shadow = 0
+#     0 = No
+# 4. Aerosol Quantity = 1 or 2
+#     1 = low aerosol
+#     2 = average aerosol
+# Then, the remaining quality values are made into a mask. The EVI data is filtered with the mask, only the pixels with
+# the right values in the quality layer will remain in the EVI layer.
+# For every initial .tiff we also made a tiff from the mask layer. This helps us to visualize the low quality pixels.
+# These files are stored in the folder "outpath_masks" with names like eg: 2000032_mask.tiff
+# We also write a csv file with 4 cols "mosaics_quality.csv":
+# - timestamp
+# - amount of good pixels (pixels that get false label in masked EVI)
+# - amount of bad pixels (pixels that get true label in masked EVI)
+# - amount of NoData pixels in the EVI layer
+
 def make_qualityMask(lookup_csv):
     # Read in the look up table
     quality_lookup = pd.read_csv(lookup_csv)

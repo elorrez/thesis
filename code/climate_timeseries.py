@@ -1,15 +1,20 @@
 import numpy as np
 import csv
 
-
 def time_series_to_csv(in_array, outpath):
+    # create the timestamps
 
-    if 'rad' in in_array:
-        years = [item for sublist in [[2001 + i] * 12 for i in range(18)] for item in sublist] + [i for i in [2019]]*8
-        months = [i for i in range(1, 13)] * 18 + [i for i in range(1, 9)]
-    else:
-        years = [item for sublist in [[2001 + i] * 12 for i in range(19)] for item in sublist]
-        months = [i for i in range(1, 13)] * 19
+    # ERA interim rad: 2001- aug 2019
+    # if 'rad' in in_array:
+    #     years = [item for sublist in [[2001 + i] * 12 for i in range(18)] for item in sublist] + [i for i in [2019]]*8
+    #     months = [i for i in range(1, 13)] * 18 + [i for i in range(1, 9)]
+    # else: # CRU and GPCC: 2001-2019
+    years = [item for sublist in [[2001 + i] * 12 for i in range(19)] for item in sublist]
+    months = [i for i in range(1, 13)] * 19
+
+    # ERA5: 2000-2020
+    #years = [item for sublist in [[2000 + i] * 12 for i in range(21)] for item in sublist]
+    #months = [i for i in range(1, 13)] * 21
 
     timestamps = [int(f"{year}{month:02}") for year, month in zip(years, months)]
 

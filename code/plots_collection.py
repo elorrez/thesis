@@ -1,7 +1,7 @@
 # In this script I collect all plots and visualizations of the data (not the analysis) to be used in the paper afterwards.
 
 # 1. Plot of the climate in Africa compared to the Amazon rainforest
-from plot_climate import extent_climatevar_df
+from plot_climate_mean_afr_sam import extent_climatevar_df
 
 inpath_Africa = "C:/EVA/THESIS/data/AFR_SAM_climate_for_plot/AFR/"
 inpath_SouthAmerica = "C:/EVA/THESIS/data/AFR_SAM_climate_for_plot/SAM/"
@@ -15,7 +15,24 @@ extent_climatevar_df(inpath_Africa, "lat_low", "air_temperature")
 inpath = "C:/EVA/THESIS/data/EVI/anomaly_time_series/"
 coordinates = ["-9.5,25.5", "0.5,20.5", "0.5,26.5", "5.5, 30.5"]
 
+from plot_evi_raw_vs_anomaly import plot_EVI_time_series
+inpath = "C:/EVA/THESIS/data/EVI/anomaly_time_series/"
+coordinates = ["7.5,5.5", "7.5,15.5", "7.5,25.5", "7.5,35.5",
+               "2.5,5.5", "2.5,15.5", "2.5,25.5", "2.5,35.5",
+               "-2.5,5.5", "-2.5,15.5", "-2.5,25.5", "-2.5,35.5",
+               "-7.5,5.5", "-7.5,15.5", "-7.5,25.5", "-7.5,35.5"
+               ]
+plot_EVI_time_series(inpath,coordinates)
+
 # 3 DIAGNOSTIC PLOTS
+from plot_climate_data import plot_climate_time_series
+inpath = "C:/EVA/THESIS/data/Climate_data/ERA5_ssr/time_series_anomalies/"
+coordinates = [ "7.5,15.5", "7.5,25.5", "7.5,35.5",
+               "2.5,15.5", "2.5,25.5", "2.5,35.5",
+                "-2.5,15.5", "-2.5,25.5", "-2.5,35.5",
+                "-7.5,15.5", "-7.5,25.5", "-7.5,35.5"
+               ]
+plot_climate_time_series(inpath,coordinates)
 
 # easy ay to plot data (quick but ugly): pandas has a function : dataframe.plot(kind, figsize, title, bins, xlim, ylim)
 # - kind: hist, bar, barh, scatter, area, kde, line, box, hexbin, pie
@@ -53,4 +70,4 @@ coordinates = ["-9.5,25.5", "0.5,20.5", "0.5,26.5", "5.5, 30.5"]
 #     color="",
 #     hover_name="",
 #     animation_frame="")
-# fig.show()
+# fig.show

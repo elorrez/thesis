@@ -5,8 +5,8 @@
 
 from analysis_run_gc import write_ouput_analysis
 
-inpath = "C:/EVA/THESIS/data/full_dataset_absolute/"
-outpath = "C:/EVA/THESIS/data/analyse_test_6/"
+inpath = "C:/EVA/THESIS/data/full_datasets_ERA5/"
+outpath = "C:/EVA/THESIS/data/analyse_test_7/"
 
 write_ouput_analysis(inpath,outpath)
 

@@ -32,8 +32,3 @@ def EVI_mosaic(inpath, outpath):
         except:
             error.append(timestamp)
     return error
-
-# path="C:/EVA/THESIS/code/testdata/testimes"
-# p, t =EVI_timestamps(path)
-# print(p)
-# print(t)

@@ -5,16 +5,21 @@ from list_files_in_directory import listfilepaths_nc
 import numpy as np
 import matplotlib.pyplot as plt
 
+# CRU_HR and GPCC: need resampling / cropping
 def lower_resolution_netcdf(path):
     ds = nc.Dataset(path)
     layer = path.split('.')[-3]
+    # GPCC: layer = 'precip'
+    # GPCC: global
     if layer == 'precip':
         ds_resampled = ds[layer][:, 80:100, 180:220]
     else:
-        our_area = ds[layer][:, 160:200, 360:440]
-        ds_resampled = our_area.reshape(our_area.shape[0], 20, 40, 2, 2).mean(axis=4).mean(axis=3)
+        # CRU: global, 0.5° resolution
+        our_area = np.flip(ds[layer][:, 160:200, 360:440], axis =1)
+        ds_resampled = our_area.reshape(our_area.shape[0], 20, 2, 40, 2).mean(axis=4).mean(axis=2)
     return ds_resampled
 
+# CRU and GPCC : concatenate 2 arrays (2000-2010 and 2011-2020) into 1 array
 def netcdf_to_arraylowres(inpath):
     paths = listfilepaths_nc(inpath)
     lower_res_arrays = []
@@ -22,6 +27,21 @@ def netcdf_to_arraylowres(inpath):
         lower_res_arrays.append(lower_resolution_netcdf(path))
     return np.concatenate(lower_res_arrays, axis=0)
 
+# ERA5 : need resampling + Temperature is in K --> °C
+def lower_resolution_netcdf_ERA5(path, layer):
+    ds = nc.Dataset(path)
+    if layer == 't2m':
+        var = ds[layer][:, :-1, :-1] - 273.15
+    else:
+        var = ds[layer][:, :-1, :-1]
+    ds_resampled = var.reshape(var.shape[0], 20, 10, 40, 10).mean(axis=4).mean(axis=2)
+    img =plt.imshow(ds_resampled[0, :, :])
+    plt.colorbar(img)
+    plt.title(f'ERA5 {layer} low resolution')
+    plt.show()
+    return ds_resampled
+
+# ERA interim : concatenate arrays into 1 array
 def netcdf_to_array(inpath):
     paths = listfilepaths_nc(inpath)
     #print(paths)

@@ -3,7 +3,6 @@ import numpy as np
 
 from EVI_listfiles import listfilepaths_nc
 
-
 # Layers in netcdf : air_temperature , surface_downwelling_shortwave_flux_in_air, precipitation_flux
 # dimensions: (366, 71, 161)
 # longitude (161): -20 , 60 (step of 0.5)

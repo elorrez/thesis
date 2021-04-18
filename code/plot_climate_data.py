@@ -17,7 +17,7 @@ def plot_climate_time_series(inpath, coordinates):
     print(len(var_list))
     print((var_list[0]))
 
-    fig, axs = plt.subplots(4,4)
+    fig, axs = plt.subplots(4,3)
     fig.suptitle(f'{var_name}: raw')
     fig.subplots_adjust(hspace=0.5)
     for var, anomaly, coord, ax in zip(var_list,anomaly_list, coordinates,axs.flatten()):
@@ -27,7 +27,7 @@ def plot_climate_time_series(inpath, coordinates):
         fig.savefig(f'C:/EVA/THESIS/data/climate_data/{var_name}_raw.jpg')
         plt.show()
 
-    fig, axs = plt.subplots(4,4)
+    fig, axs = plt.subplots(4,3)
     fig.suptitle(f'{var_name}: anomalies')
     fig.subplots_adjust(hspace=0.5)
     for var, anomaly, coord, ax in zip(var_list,anomaly_list, coordinates,axs.flatten()):
@@ -37,22 +37,16 @@ def plot_climate_time_series(inpath, coordinates):
         fig.savefig(f'C:/EVA/THESIS/data/climate_data/{var_name}_anomaly.jpg')
         plt.show()
 
-    fig, axs = plt.subplots(4,4)
-    fig.suptitle(f'{var_name}: trend')
-    fig.subplots_adjust(hspace=0.5)
-    for trend, coord, ax in zip(trend_list, coordinates,axs.flatten()):
-        #ax.plot(evi)
-        ax.plot(trend)
-        ax.set_title(coord, fontsize= 11)
-        fig.savefig(f'C:/EVA/THESIS/data/climate_data/{var_name}_trend.jpg')
-        plt.show()
+    # fig, axs = plt.subplots(4,3)
+    # fig.suptitle(f'{var_name}: trend')
+    # fig.subplots_adjust(hspace=0.5)
+    # for trend, coord, ax in zip(trend_list, coordinates,axs.flatten()):
+    #     #ax.plot(evi)
+    #     ax.plot(trend)
+    #     ax.set_title(coord, fontsize= 11)
+    #     fig.savefig(f'C:/EVA/THESIS/data/climate_data/{var_name}_trend.jpg')
+    #     plt.show()
 
 
 
-inpath = "C:/EVA/THESIS/data/Climate_data/CRU_HR_tmp/time_series_anomalies/"
-coordinates = ["7.5,5.5", "7.5,15.5", "7.5,25.5", "7.5,35.5",
-               "2.5,5.5", "2.5,15.5", "2.5,25.5", "2.5,35.5",
-               "-2.5,5.5", "-2.5,15.5", "-2.5,25.5", "-2.5,35.5",
-               "-7.5,5.5", "-7.5,15.5", "-7.5,25.5", "-7.5,35.5"
-               ]
-plot_climate_time_series(inpath,coordinates)
+

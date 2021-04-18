@@ -14,8 +14,10 @@ def anomaly_decomposition(inpath, outpath):
         df = pd.read_csv(f"evi_{coords}.csv", header=None, names=['timestamp', 'evi'])
         # plt.plot(df.index, df['evi'])
         # plt.show()
-        df['evi'].replace(-3000, df['evi'].mean(), inplace=True)
+        #df['evi'].replace(-3000, df['evi'].mean(), inplace=True)
 
+        # Values /1000
+        df['evi'] = df['evi']/1000
         # 1. detrended = raw data - linear trend
         # linear trend: ordinary least squares ?
         df = df.reset_index()
@@ -59,10 +61,9 @@ def anomaly_decomposition(inpath, outpath):
         df = df.join(monthly_avg, on='month', rsuffix='_avg')
         df['anomaly'] = df['detrended'] - df['detrended_avg']
 
-        df['absolute_anomaly'] = df['anomaly'].abs()
 
 
-        cols = ['timestamp', 'year', 'month', 'evi', 'trend', 'detrended', 'detrended_avg', 'absolute_anomaly']
+        cols = ['timestamp', 'year', 'month', 'evi', 'trend', 'detrended', 'detrended_avg', 'anomaly']
         df = df[cols]
         df.to_csv(outpath + f"evi_anom_{coords}.csv", header=None, index=None)
         # plt.plot(df.index, df['anomaly'])

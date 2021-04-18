@@ -12,17 +12,20 @@ in_ERA = "C:/EVA/THESIS/data/Climate_data/ERA_rad/time_series_raw/"
 in_GPCC = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_raw/"
 in_paths = [in_CRU_tmp, in_CRU_pre, in_ERA, in_GPCC]
 
-def find_missing_value(inpath):
-    all_na_list = []
-    for (coordinate, file) in zip(listcoords_csv(inpath) ,listfilenames_csv(inpath)):
-        #var = inpath.split('/')[-3]
-        df = pd.read_csv(inpath + file, names = ['timestamp', 'anomaly'])
+inpath = "C:/EVA/THESIS/data/Climate_data/GPCC_pre/time_series_raw/"
+#def find_missing_value(inpath):
+all_na_list = []
+for (coordinate, file) in zip(listcoords_csv(inpath) ,listfilenames_csv(inpath)):
+    #var = inpath.split('/')[-3]
+    df = pd.read_csv(inpath + file, names = ['timestamp', 'anomaly'])
 
-        if len(df['anomaly'].value_counts()) == 1:
+    if len(df['anomaly'].value_counts()) == 0:
 
-            all_na_list.append(coordinate)
-            #print(df[var].value_counts())
-    return all_na_list
+        all_na_list.append(coordinate)
+        #print(df[var].value_counts())p
+
+print(all_na_list)
+#return all_na_list
 #
 # for path in in_paths:
 #     var = path.split('/')[-3]
